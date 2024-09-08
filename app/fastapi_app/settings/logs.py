@@ -19,12 +19,23 @@ logger_config = {
             'fmt': '%(levelname)s: [%(asctime)s - %(filename)s:%(lineno)s - %(funcName)s] %(message)s',
             'datefmt': '%Y-%m-%d %H:%M:%S',
         },
+        'json': {
+            '()': 'app.fastapi_app.settings.logging_utils.JSONFormatter',
+            'fmt_keys': {
+                'level': 'levelname',
+                'timestamp': 'timestamp',
+                'message': 'message',
+                'module': 'module',
+                'function': 'funcName',
+                'line': 'lineno',
+            },
+        },
     },
     'handlers': {
         'console': {
             'level': settings.LOG_LEVEL,
-            'formatter': 'default',
-            'class': 'logging.StreamHandler',
+            'formatter': 'json' if settings.JSON_LOGS is True else 'default',
+            'class': 'app.fastapi_app.settings.logging_utils.RequestIdStreamHandler',
             'stream': 'ext://sys.stderr',
         },
         'file': {
