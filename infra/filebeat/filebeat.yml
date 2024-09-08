@@ -1,0 +1,16 @@
+  filebeat.yml:
+    filebeat.inputs:
+    - type: container
+      enabled: true
+      paths:
+        - /var/logs/*.log
+      fields_under_root: true
+
+    queue.mem:
+      events: 4096
+      flush.min_events: 512
+      flush.timeout: 2s
+
+    output.logstash:
+      enabled: true
+      hosts: ["logstash:5044"]
