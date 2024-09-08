@@ -26,9 +26,12 @@ class Settings(BaseSettings):
     CLICKHOUSE_PASSWORD: SecretStr
     CLICKHOUSE_DB: str
     CLICKHOUSE_DSN: ClickHouseDsn | str = ''
+    SENTRY_DSN: str
 
     @field_validator('CLICKHOUSE_DSN')
-    def build_clickhouse_dsn(cls, value: ClickHouseDsn | None, info: ValidationInfo) -> Annotated[str, ClickHouseDsn]:
+    def build_clickhouse_dsn(
+        cls, value: ClickHouseDsn | None, info: ValidationInfo
+    ) -> Annotated[str, ClickHouseDsn]:  # type: ignore
         if not value:
             value = ClickHouseDsn.build(
                 scheme='clickhouse+native',

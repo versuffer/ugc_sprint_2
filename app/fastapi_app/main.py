@@ -2,6 +2,7 @@ import logging
 from contextlib import asynccontextmanager
 from pprint import pformat
 
+import sentry_sdk
 import uvicorn
 from aiokafka import AIOKafkaProducer
 from clickhouse_driver import Client
@@ -12,6 +13,12 @@ from app.fastapi_app.api.api_router import api_router
 from app.fastapi_app.settings.config import settings
 from app.fastapi_app.settings.logs import logger
 from app.kafka.producers import kafka_producer
+
+sentry_sdk.init(
+    dsn=settings.SENTRY_DSN,
+    traces_sample_rate=1.0,
+    profiles_sample_rate=1.0,
+)
 
 
 @asynccontextmanager
