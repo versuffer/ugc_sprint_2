@@ -14,11 +14,6 @@ logger_config = {
             'fmt': '%(levelprefix)s[%(asctime)s - %(filename)s:%(lineno)s - %(funcName)s] %(message)s',
             'datefmt': '%Y-%m-%d %H:%M:%S',
         },
-        'for_file': {
-            '()': 'uvicorn.logging.DefaultFormatter',
-            'fmt': '%(levelname)s: [%(asctime)s - %(filename)s:%(lineno)s - %(funcName)s] %(message)s',
-            'datefmt': '%Y-%m-%d %H:%M:%S',
-        },
         'json': {
             '()': 'app.fastapi_app.settings.logging_utils.JSONFormatter',
             'fmt_keys': {
@@ -38,19 +33,11 @@ logger_config = {
             'class': 'app.fastapi_app.settings.logging_utils.RequestIdStreamHandler',
             'stream': 'ext://sys.stderr',
         },
-        'file': {
-            'level': settings.LOG_LEVEL,
-            'class': 'logging.handlers.RotatingFileHandler',
-            'formatter': 'for_file',
-            'filename': 'log_file.log',
-            'maxBytes': 500000,
-            'backupCount': 10,
-        },
     },
     'loggers': {
         'root': {
             'level': settings.LOG_LEVEL,
-            'handlers': ['console', 'file'],
+            'handlers': ['console'],
         },
     },
 }
