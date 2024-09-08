@@ -120,7 +120,7 @@ services:
     image: logstash:8.10.2
     environment:
       XPACK_MONITORING_ENABLED: "false"
-      ES_HOST: elasticsearch
+      ES_HOST: "elasticsearch:9200"
     ports:
       - "5044:5044/udp"
     volumes:
@@ -133,9 +133,10 @@ services:
 
   filebeat:
     image: elastic/filebeat:8.10.2
+    user: root
     volumes:
       - ./infra/filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml
-      - /var/lib/docker/containers:/var/logs:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
     networks:
       - ugc_network
     depends_on:

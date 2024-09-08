@@ -41,3 +41,5 @@ dmypy.json
 
 # Additional
 /sandbox.py
+
+/infra/elastic/data
