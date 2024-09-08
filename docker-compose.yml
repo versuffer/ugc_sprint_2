@@ -116,8 +116,8 @@ services:
     networks:
       - ugc_network
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/fastapi_app.conf:/etc/nginx/conf.d/fastapi_app.conf
+      - ./infra_configs/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./infra_configs/nginx/fastapi_app.conf:/etc/nginx/conf.d/fastapi_app.conf
       - nginx_static:/var/html/static/
       - nginx_media:/var/html/media/
     restart: always
