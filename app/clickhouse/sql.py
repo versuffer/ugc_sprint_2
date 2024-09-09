@@ -5,11 +5,7 @@ create_click_topic_kafka_sql = """
 CREATE TABLE IF NOT EXISTS metrics.click_topic (
     user_id String,
     element_id String
-) ENGINE = Kafka
-SETTINGS kafka_broker_list = '{kafka_host}:{kafka_port}',
-         kafka_topic = 'click',
-         kafka_group_name = 'click_group',
-         kafka_format = 'JSONEachRow'
+) ENGINE = Kafka('{kafka_host}:{kafka_port}', 'click', 'click_group', 'JSONEachRow')
 """
 
 create_clicks_table_sql = """

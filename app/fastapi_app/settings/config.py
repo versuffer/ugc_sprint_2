@@ -12,8 +12,9 @@ class Settings(BaseSettings):
     APP_TITLE: str = 'UGC Srint 1'
     APP_DESCRIPTION: str = 'Default description'
     DEBUG: bool = False
-    ENABLE_AUTH: bool = True
+    ENABLE_AUTH: bool = False
     LOG_LEVEL: Literal['DEBUG', 'INFO', 'WARNING', 'ERROR'] = 'INFO'
+    JSON_LOGS: bool = True
     AUTH_SERVICE_URL: str
     AUTH_SERVICE_API: dict = {'verify_token': '/api/v1/auth/verify/access_token'}
     SERVICES: list[str] = ['front']
@@ -26,9 +27,12 @@ class Settings(BaseSettings):
     CLICKHOUSE_PASSWORD: SecretStr
     CLICKHOUSE_DB: str
     CLICKHOUSE_DSN: ClickHouseDsn | str = ''
+    SENTRY_DSN: str
 
     @field_validator('CLICKHOUSE_DSN')
-    def build_clickhouse_dsn(cls, value: ClickHouseDsn | None, info: ValidationInfo) -> Annotated[str, ClickHouseDsn]:
+    def build_clickhouse_dsn(
+        cls, value: ClickHouseDsn | None, info: ValidationInfo
+    ) -> Annotated[str, ClickHouseDsn]:  # type: ignore
         if not value:
             value = ClickHouseDsn.build(
                 scheme='clickhouse+native',

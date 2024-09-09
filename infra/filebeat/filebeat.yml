@@ -1,0 +1,19 @@
+filebeat.inputs:
+- type: container
+  paths:
+    - '/var/lib/docker/containers/*/*.log'
+  exclude_files: ['filebeat-*','logstash*','elastic*','kube*','calico*','nfs*','kibana*','coredns*','controller*','speaker*','ingress*','dashboard*']
+  processors:
+    - add_docker_metadata: ~
+
+queue.mem:
+  events: 4096
+  flush.min_events: 512
+  flush.timeout: 2s
+
+output.logstash:
+  enabled: true
+  hosts: ["logstash:5044"]
+
+setup.kibana:
+  host: 'kibana:5601'

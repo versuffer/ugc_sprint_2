@@ -27,6 +27,8 @@ uvicorn = "^0.30.6"
 requests = "^2.32.3"
 pyjwt = "2.8.0"
 backoff = "^2.2.1"
+sentry-sdk = {extras = ["fastapi"], version = "^2.13.0"}
+starlette-context = "^0.3.6"
 
 
 [tool.poetry.group.test.dependencies]
