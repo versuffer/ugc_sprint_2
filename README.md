@@ -1,5 +1,5 @@
 # Ссылка на репозиторий
-https://github.com/versuffer/ugc_sprint_1
+https://github.com/versuffer/ugc_sprint_2
 
 # Как запустить сервис
 
