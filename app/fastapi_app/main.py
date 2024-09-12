@@ -7,10 +7,12 @@ import uvicorn
 from aiokafka import AIOKafkaProducer
 from clickhouse_driver import Client
 from fastapi import Depends, FastAPI, Header, Request
+from motor.motor_asyncio import AsyncIOMotorClient
 from starlette_context import request_cycle_context
 
 from app.clickhouse.sql import clickhouse_init_sql_queries
 from app.fastapi_app.api.api_router import api_router
+from app.fastapi_app.services.repositories.mongo import mongodb
 from app.fastapi_app.settings.config import settings
 from app.fastapi_app.settings.logs import logger
 from app.kafka.producers import kafka_producer
@@ -36,6 +38,10 @@ async def lifespan(app: FastAPI):
         bootstrap = {'bootstrap_servers': '{}:{}'.format(settings.KAFKA_HOST, settings.KAFKA_PORT)}
         kafka_producer.aio_producer = AIOKafkaProducer(**bootstrap)
         await kafka_producer.aio_producer.start()  # type: ignore
+
+        # Mongo
+        client = AsyncIOMotorClient(settings.MONGO_DSN)
+        mongodb.mongodb_engine = client
 
         # Clickhouse
         clickhouse_client = Client.from_url(settings.CLICKHOUSE_DSN)

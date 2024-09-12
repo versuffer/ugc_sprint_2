@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Annotated, Literal
+from typing import Annotated, Literal, Any
 
 from pydantic import ClickHouseDsn, DirectoryPath, SecretStr, field_validator
 from pydantic_core.core_schema import ValidationInfo
@@ -9,7 +9,7 @@ PROJECT_DIR: DirectoryPath = Path(__file__).resolve().parent.parent.parent.paren
 
 
 class Settings(BaseSettings):
-    APP_TITLE: str = 'UGC Srint 1'
+    APP_TITLE: str = 'UGC Srint 2'
     APP_DESCRIPTION: str = 'Default description'
     DEBUG: bool = False
     ENABLE_AUTH: bool = False
@@ -28,6 +28,13 @@ class Settings(BaseSettings):
     CLICKHOUSE_DB: str
     CLICKHOUSE_DSN: ClickHouseDsn | str = ''
     SENTRY_DSN: str
+    MONGO_DSN: str
+    MONGO_DATABASE: str = 'movie'
+    MONGO_COLLECTION_LIKE: str = 'like'
+    MONGO_COLLECTION_BOOKMARK: str = 'bookmark'
+    MONGO_COLLECTION_REVIEW: str = 'review'
+    MONGO_COLLECTION_REVIEW_RATING: str = 'review_rating'
+    MONGO_COLLECTION_MOVIES: str = 'movies'
 
     @field_validator('CLICKHOUSE_DSN')
     def build_clickhouse_dsn(

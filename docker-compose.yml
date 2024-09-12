@@ -142,6 +142,15 @@ services:
     depends_on:
       - logstash
 
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: Username
+      MONGO_INITDB_ROOT_PASSWORD: Password
+    restart: unless-stopped
+
   fastapi_app:
     container_name: fastapi_app
     build:
@@ -162,6 +171,7 @@ services:
     depends_on:
       - clickhouse-server
       - filebeat
+      - mongodb
 
   nginx:
     container_name: nginx
