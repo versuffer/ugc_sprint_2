@@ -1,0 +1,40 @@
+name: ugc workflow
+
+on:
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  linters:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@master
+
+    - name: Set up Python
+      uses: actions/setup-python@master
+      with:
+        python-version: 3.11.9
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install poetry
+        poetry install
+
+    - name: Lint with flake8
+      run: |
+        poetry run flake8
+
+    - name: Sort imports with isort
+      run: |
+        poetry run isort --check-only .
+
+#    - name: Auto-fix imports with isort
+#      if: failure()
+#      run: |
+#        poetry run isort .
+
+    - name: Check with mypy
+      run: |
+        poetry run mypy .
