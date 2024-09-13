@@ -1,20 +1,26 @@
 name: ugc workflow
 
 on:
+  push:
+    branches: [ "main" ]
   pull_request:
-    branches:
-      - master
+    branches: [ "main" ]
 
 jobs:
   linters:
     runs-on: ubuntu-20.04
+
+    strategy:
+      matrix:
+        python-version: [ "3.11" ]
+
     steps:
     - uses: actions/checkout@master
 
-    - name: Set up Python
+    - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@master
       with:
-        python-version: 3.11.9
+        python-version: ${{ matrix.python-version }}
 
     - name: Install dependencies
       run: |
@@ -26,15 +32,19 @@ jobs:
       run: |
         poetry run flake8
 
-    - name: Sort imports with isort
+    - name: Check sort imports with isort
       run: |
         poetry run isort --check-only .
-
-#    - name: Auto-fix imports with isort
-#      if: failure()
-#      run: |
-#        poetry run isort .
 
     - name: Check with mypy
       run: |
         poetry run mypy .
+
+    - name: Send telegram message
+      if: ${{ github.event_name == 'pull_request'}}
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_CHAT_ID }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        message: |
+          ${{ github.actor }} create PR.
