@@ -41,7 +41,7 @@ jobs:
         poetry run mypy .
 
     - name: Send telegram message
-      if: ${{ github.event_name == 'pull_request'}}
+      if: ${{ github.event_name == 'pull_request' && secrets.TELEGRAM_CHAT_ID && secrets.TELEGRAM_TOKEN}}
       uses: appleboy/telegram-action@master
       with:
         to: ${{ secrets.TELEGRAM_CHAT_ID }}
