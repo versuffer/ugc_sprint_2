@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import Annotated, Literal, Any
 
-from pydantic import ClickHouseDsn, DirectoryPath, SecretStr, field_validator
+from pydantic import ClickHouseDsn, DirectoryPath, SecretStr, field_validator, MongoDsn
 from pydantic_core.core_schema import ValidationInfo
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     CLICKHOUSE_DB: str
     CLICKHOUSE_DSN: ClickHouseDsn | str = ''
     SENTRY_DSN: str
-    MONGO_DSN: str
+    MONGO_DSN: MongoDsn | str = ''
     MONGO_DATABASE: str = 'movie'
     MONGO_COLLECTION_LIKE: str = 'like'
     MONGO_COLLECTION_BOOKMARK: str = 'bookmark'
@@ -50,6 +50,21 @@ class Settings(BaseSettings):
                 path=f"{info.data['CLICKHOUSE_DB'] or ''}",
             )
         return str(value)
+    #
+    # @field_validator('MONGO_DSN')
+    # def build_clickhouse_dsn(
+    #     cls, value: MongoDsn | None, info: ValidationInfo
+    # ) -> Annotated[str, MongoDsn]:  # type: ignore
+    #     if not value:
+    #         value = MongoDsn.build(
+    #             scheme='mongodb',
+    #             username=info.data.get('MONGO_USER', ''),
+    #             password=info.data.get('MONGO_PASSWORD', ''),
+    #             host=info.data['MONGO_HOST'],
+    #             port=info.data['MONGO_PORT'],
+    #             path=f"{info.data['MONGO_DATABASE'] or ''}",
+    #         )
+    #     return str(value)
 
     model_config = SettingsConfigDict(env_file=PROJECT_DIR / '.env')
 

@@ -9,6 +9,7 @@ from clickhouse_driver import Client
 from fastapi import Depends, FastAPI, Header, Request
 from motor.motor_asyncio import AsyncIOMotorClient
 from starlette_context import request_cycle_context
+from beanie import init_beanie
 
 from app.clickhouse.sql import clickhouse_init_sql_queries
 from app.fastapi_app.api.api_router import api_router
@@ -40,8 +41,9 @@ async def lifespan(app: FastAPI):
         await kafka_producer.aio_producer.start()  # type: ignore
 
         # Mongo
-        client = AsyncIOMotorClient(settings.MONGO_DSN)
-        mongodb.mongodb_engine = client
+        mongo_client = AsyncIOMotorClient(settings.MONGO_DSN)
+        mongodb.mongodb_engine = mongo_client
+        # await init_beanie(database=mongo_client[settings.MONGO_DB_NAME], document_models=[Post])
 
         # Clickhouse
         clickhouse_client = Client.from_url(settings.CLICKHOUSE_DSN)
