@@ -45,11 +45,14 @@ class UgcService:
         user_film_text_review = await TextReviewModel(**text_review_data.model_dump()).insert()
         return TextReviewSchema.model_validate(user_film_text_review.model_dump())
 
-    async def add_score_review(self, review_id: UUID, score_review_data: CreateScoreReviewSchema) -> ScoreReviewSchema:
-        update_data = score_review_data.model_dump() | {"review_id": review_id}
+    async def upsert_score_review(self, review_id: UUID, score_review_data: CreateScoreReviewSchema) -> ScoreReviewSchema:
+        upsert_data = score_review_data.model_dump() | {"review_id": review_id}
 
-        review_score = await ScoreReviewModel.update_one({"review_id": review_id}, update_data, upsert=True)
-        # review_score = await ScoreReviewModel(**score_review_data.model_dump() | {"review_id": review_id}).insert()
+        if review_score := await ScoreReviewModel.find_one(ScoreReviewModel.review_id == review_id):
+            await review_score.set(upsert_data)
+            return ScoreReviewSchema.model_validate(review_score.model_dump())
+
+        review_score = await ScoreReviewModel(**upsert_data).insert()
         return ScoreReviewSchema.model_validate(review_score.model_dump())
 
     async def get_film_reviews(self, film_id: UUID) -> list[ReviewExtSchema]:

@@ -99,9 +99,9 @@ async def add_text_review(
 
 
 @ugc_router.put('/reviews/{review_id}/score', response_model=ScoreReviewSchema, tags=["Reviews"])
-async def add_score_review(
+async def upsert_score_review(
     review_id: UUID,
     score_review_data: CreateScoreReviewSchema,
     service: UgcService = Depends(),
 ):
-    return await service.add_score_review(review_id, score_review_data)
+    return await service.upsert_score_review(review_id, score_review_data)
