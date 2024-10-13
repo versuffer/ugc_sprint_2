@@ -11,10 +11,10 @@ PROJECT_DIR: DirectoryPath = Path(__file__).resolve().parent.parent.parent.paren
 class Settings(BaseSettings):
     # mongo_host: str
     # mongo_port: int
-    log_level: Literal['DEBUG', 'INFO', 'WARNING', 'ERROR'] = 'INFO'
+    log_level: Literal["DEBUG", "INFO", "WARNING", "ERROR"] = "INFO"
     json_logs: bool = True
     debug: bool = False
-    mongo_dsn: MongoDsn | str = 'mongodb://mongoadmin:mongoadmin@localhost:27017'
+    mongo_dsn: MongoDsn | str = "mongodb://mongoadmin:mongoadmin@localhost:27017"
     # MONGO_DATABASE: str = 'movie'
     # MONGO_COLLECTION_LIKE: str = 'like'
     # MONGO_COLLECTION_BOOKMARK: str = 'bookmark'
@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     #         )
     #     return str(value)
 
-    model_config = SettingsConfigDict(env_file=PROJECT_DIR / '.env')
+    model_config = SettingsConfigDict(env_file=PROJECT_DIR / ".env")
 
 
 settings = Settings()

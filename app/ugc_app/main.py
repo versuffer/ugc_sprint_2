@@ -11,13 +11,19 @@ from starlette_context import request_cycle_context
 from beanie import init_beanie
 
 from ugc_app.api.api_router import api_router
-from ugc_app.services.repositories.mongo.models import BookmarkModel, ScoreModel, TextReviewModel, ScoreReviewModel
+from ugc_app.services.repositories.mongo.models import (
+    BookmarkModel,
+    ScoreModel,
+    TextReviewModel,
+    ScoreReviewModel,
+)
 from ugc_app.settings.config import settings
+
 # from ugc_app.settings.logs import logger
 
 
-async def fastapi_context(x_request_id=Header(default='NO_REQUEST_ID')):
-    data = {'request_id': x_request_id}
+async def fastapi_context(x_request_id=Header(default="NO_REQUEST_ID")):
+    data = {"request_id": x_request_id}
     with request_cycle_context(data):
         yield
 
@@ -26,16 +32,20 @@ async def fastapi_context(x_request_id=Header(default='NO_REQUEST_ID')):
 async def lifespan(app: FastAPI):
 
     mongo_client = AsyncIOMotorClient(settings.mongo_dsn)
-    await init_beanie(database=mongo_client["MoviesDB"], document_models=[BookmarkModel, ScoreModel, TextReviewModel, ScoreReviewModel])
+    await init_beanie(
+        database=mongo_client["MoviesDB"],
+        document_models=[BookmarkModel, ScoreModel, TextReviewModel, ScoreReviewModel],
+    )
     yield
     mongo_client.close()
 
+
 app = FastAPI(
-    title='UGC - 2',
-    description='description',
-    version='1.0.0',
+    title="UGC - 2",
+    description="description",
+    version="1.0.0",
     debug=settings.debug,
-    docs_url='/',
+    docs_url="/",
     lifespan=lifespan,
     dependencies=[Depends(fastapi_context)],
 )

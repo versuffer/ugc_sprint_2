@@ -6,8 +6,13 @@ from pydantic import BaseModel
 
 class ScoreSchema(BaseModel):
     film_id: UUID
+    avg_score: float
+
+
+class CreateScoreSchema(BaseModel):
+    film_id: UUID
     user_id: UUID
-    avg_score: int
+    score: int
 
 
 class CreateTextReviewSchema(BaseModel):
@@ -38,11 +43,11 @@ class ScoreReviewSchema(CreateScoreReviewSchema):
 
     class Config:
         fields = {
-            'id': 'id',
-            'review_id': 'review_id',
-            'user_id': 'user_id',
-            'score': 'score',
-            'created_at': 'created_at',
+            "id": "id",
+            "review_id": "review_id",
+            "user_id": "user_id",
+            "score": "score",
+            "created_at": "created_at",
         }
 
 
