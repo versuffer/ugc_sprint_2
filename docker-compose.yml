@@ -1,6 +1,23 @@
 version: '3.9'
 
 services:
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+#    environment:
+#      MONGO_INITDB_ROOT_USERNAME: mongoadmin        # Пользователь root
+#      MONGO_INITDB_ROOT_PASSWORD: mongoadmin        # Пароль root
+#      MONGO_INITDB_DATABASE: MoviesDB          # Имя создаваемой базы данных
+    volumes:
+      - ./infra/mogodb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+      - mongo_data:/data/db
+    networks:
+      - ugc_network
+    restart: unless-stopped
+
   kafka-0:
     image: bitnami/kafka:3.4
     ports:
@@ -186,6 +203,7 @@ volumes:
   clickhouse_data:
   nginx_static:
   nginx_media:
+  mongo_data:
 
 networks:
   ugc_network:
