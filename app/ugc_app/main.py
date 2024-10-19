@@ -1,21 +1,16 @@
-import logging
 from contextlib import asynccontextmanager
-from pprint import pformat
 
 import uvicorn
-
+from beanie import init_beanie
 from fastapi import Depends, FastAPI, Header
 from motor.motor_asyncio import AsyncIOMotorClient
 from starlette_context import request_cycle_context
-
-from beanie import init_beanie
-
 from ugc_app.api.api_router import api_router
 from ugc_app.services.repositories.mongo.models import (
     BookmarkModel,
     ScoreModel,
-    TextReviewModel,
     ScoreReviewModel,
+    TextReviewModel,
 )
 from ugc_app.settings.config import settings
 

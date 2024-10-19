@@ -1,5 +1,6 @@
-from uuid import UUID, uuid4
 from datetime import datetime, timezone
+from uuid import UUID, uuid4
+
 from beanie import Document
 from pydantic import Field
 

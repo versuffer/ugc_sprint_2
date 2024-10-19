@@ -1,8 +1,7 @@
 from pathlib import Path
-from typing import Annotated, Literal, Any
+from typing import Literal
 
-from pydantic import ClickHouseDsn, DirectoryPath, SecretStr, field_validator, MongoDsn
-from pydantic_core.core_schema import ValidationInfo
+from pydantic import DirectoryPath, MongoDsn
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 PROJECT_DIR: DirectoryPath = Path(__file__).resolve().parent.parent.parent.parent

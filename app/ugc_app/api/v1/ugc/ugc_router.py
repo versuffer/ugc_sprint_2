@@ -1,21 +1,19 @@
 from uuid import UUID
-from datetime import datetime, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from fastapi.encoders import jsonable_encoder
 from starlette.responses import JSONResponse
-from starlette.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_204_NO_CONTENT
-
+from starlette.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST
 from ugc_app.schemas.api.v1.schemas import (
+    BookmarkSchema,
+    CreateBookmarkSchema,
+    CreateScoreReviewSchema,
+    CreateScoreSchema,
+    CreateTextReviewSchema,
+    ReviewExtSchema,
+    ScoreReviewSchema,
     ScoreSchema,
     TextReviewSchema,
-    BookmarkSchema,
-    CreateTextReviewSchema,
-    CreateBookmarkSchema,
-    ReviewExtSchema,
-    CreateScoreReviewSchema,
-    ScoreReviewSchema,
-    CreateScoreSchema,
 )
 from ugc_app.services.ugc.ugc_service import UgcService
 
@@ -66,9 +64,7 @@ async def add_bookmark(
     return await service.add_bookmark(bookmark_data)
 
 
-@ugc_router.get(
-    "/bookmarks/{user_id}", response_model=list[BookmarkSchema], tags=["Bookmarks"]
-)
+@ugc_router.get("/bookmarks/{user_id}", response_model=list[BookmarkSchema], tags=["Bookmarks"])
 async def user_bookmarks(
     user_id: UUID,
     service: UgcService = Depends(),
@@ -103,25 +99,19 @@ async def add_text_review(
     )
 
 
-@ugc_router.get(
-    "/reviews/{film_id}", response_model=list[ReviewExtSchema], tags=["Reviews"]
-)
-async def add_text_review(
+@ugc_router.get("/reviews/{film_id}", response_model=list[ReviewExtSchema], tags=["Reviews"])
+async def get_text_review(
     film_id: UUID,
     service: UgcService = Depends(),
 ):
     return await service.get_film_reviews(film_id)
 
 
-@ugc_router.put(
-    "/reviews/{review_id}/score", response_model=ScoreReviewSchema, tags=["Reviews"]
-)
+@ugc_router.put("/reviews/{review_id}/score", response_model=ScoreReviewSchema, tags=["Reviews"])
 async def upsert_score_review(
     review_id: UUID,
     user_id: UUID,
     score: int = Query(..., ge=0, le=10),
     service: UgcService = Depends(),
 ):
-    return await service.upsert_score_review(
-        review_id, CreateScoreReviewSchema(user_id=user_id, score=score)
-    )
+    return await service.upsert_score_review(review_id, CreateScoreReviewSchema(user_id=user_id, score=score))

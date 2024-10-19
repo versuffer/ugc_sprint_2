@@ -1,16 +1,24 @@
 import asyncio
 import random
 from uuid import uuid4
+
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient
-
-from services.repositories.mongo.models import BookmarkModel, TextReviewModel, ScoreReviewModel, ScoreModel
+from services.repositories.mongo.models import (
+    BookmarkModel,
+    ScoreModel,
+    ScoreReviewModel,
+    TextReviewModel,
+)
 from settings.config import settings
 
 
 async def populate_db(num_records: int):
     client = AsyncIOMotorClient(settings.mongo_dsn)
-    await init_beanie(database=client[settings.mongo_db], document_models=[BookmarkModel, TextReviewModel, ScoreReviewModel, ScoreModel])
+    await init_beanie(
+        database=client[settings.mongo_db],
+        document_models=[BookmarkModel, TextReviewModel, ScoreReviewModel, ScoreModel],
+    )
 
     for _ in range(num_records):
         film_id = uuid4()
@@ -30,8 +38,10 @@ async def populate_db(num_records: int):
         if (_ + 1) % 10000 == 0:
             print(f"Inserted {_ + 1} records")
 
+
 async def main():
     await populate_db(10_000_000)
+
 
 if __name__ == "__main__":
     asyncio.run(main())
