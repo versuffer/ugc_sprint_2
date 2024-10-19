@@ -2,6 +2,7 @@ import asyncio
 import random
 from datetime import UTC, datetime
 from uuid import UUID, uuid4
+import time
 
 import asyncpg
 import sqlalchemy as sa
@@ -55,12 +56,16 @@ def create_tables():
 
 
 async def populate_db(num_records: int):
+    start_time = time.time()
     conn = await asyncpg.connect(DATABASE_URL)
+
+    film_ids = [str(uuid4()) for _ in range(500)]
+    user_ids = [str(uuid4()) for _ in range(10000)]
 
     for _ in range(num_records):
         id_ = str(uuid4())
-        film_id = str(uuid4())
-        user_id = str(uuid4())
+        film_id = random.choice(film_ids)
+        user_id = random.choice(user_ids)
 
         await conn.execute(
             'INSERT INTO bookmarks (id, film_id, user_id, created_at) VALUES ($1, $2, $3, $4)',
@@ -107,11 +112,13 @@ async def populate_db(num_records: int):
             print(f"Inserted {_ + 1} records")
 
     await conn.close()
+    end_time = time.time()
+    print(f"Время вставки {num_records} записей: {end_time - start_time:.2f} секунд")
 
 
 async def main():
     create_tables()
-    await populate_db(10_000_000)
+    await populate_db(200_000)
 
 
 if __name__ == "__main__":
