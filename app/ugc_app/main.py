@@ -33,7 +33,7 @@ async def lifespan(app: FastAPI):
 
     mongo_client = AsyncIOMotorClient(settings.mongo_dsn)
     await init_beanie(
-        database=mongo_client["MoviesDB"],
+        database=mongo_client[settings.mongo_db],
         document_models=[BookmarkModel, ScoreModel, TextReviewModel, ScoreReviewModel],
     )
     yield
