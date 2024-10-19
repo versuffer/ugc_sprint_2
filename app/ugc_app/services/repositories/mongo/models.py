@@ -1,7 +1,7 @@
 from uuid import UUID, uuid4
 from datetime import datetime, timezone
 from beanie import Document
-from pydantic import Field, conint
+from pydantic import Field
 
 
 class BaseDocument(Document):
@@ -24,7 +24,7 @@ class ScoreReviewModel(Document):
     id: UUID = Field(default_factory=uuid4)
     user_id: UUID
     review_id: UUID
-    score: int  # conint(ge=0, le=1)
+    score: int
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
