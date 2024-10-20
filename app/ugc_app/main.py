@@ -5,16 +5,14 @@ from beanie import init_beanie
 from fastapi import Depends, FastAPI, Header
 from motor.motor_asyncio import AsyncIOMotorClient
 from starlette_context import request_cycle_context
-from ugc_app.api.api_router import api_router
-from ugc_app.services.repositories.mongo.models import (
+from api.api_router import api_router
+from services.repositories.mongo.models import (
     BookmarkModel,
     ScoreModel,
     ScoreReviewModel,
     TextReviewModel,
 )
-from ugc_app.settings.config import settings
-
-# from ugc_app.settings.logs import logger
+from settings.config import settings
 
 
 async def fastapi_context(x_request_id=Header(default="NO_REQUEST_ID")):
@@ -40,7 +38,8 @@ app = FastAPI(
     description="description",
     version="1.0.0",
     debug=settings.debug,
-    docs_url="/",
+    docs_url="/docs",
+    root_path="/ugc_app",
     lifespan=lifespan,
     dependencies=[Depends(fastapi_context)],
 )
@@ -49,5 +48,4 @@ app.include_router(api_router)
 
 
 if __name__ == "__main__":
-    # logger.info(f"Start server. Settings: \n{pformat(settings.dict())}")
     uvicorn.run("main:app", host="localhost", port=8000)

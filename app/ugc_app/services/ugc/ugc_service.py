@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from ugc_app.schemas.api.v1.schemas import (
+from schemas.api.v1.schemas import (
     BookmarkSchema,
     CreateBookmarkSchema,
     CreateScoreReviewSchema,
@@ -11,7 +11,7 @@ from ugc_app.schemas.api.v1.schemas import (
     ScoreSchema,
     TextReviewSchema,
 )
-from ugc_app.services.repositories.mongo.models import (
+from services.repositories.mongo.models import (
     BookmarkModel,
     ScoreModel,
     ScoreReviewModel,

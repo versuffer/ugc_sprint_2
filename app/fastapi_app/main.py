@@ -55,7 +55,8 @@ app = FastAPI(
     description=settings.APP_DESCRIPTION,
     version='1.0.0',
     debug=settings.DEBUG,
-    docs_url='/',
+    docs_url='/docs',
+    root_path='/fastapi_app',
     lifespan=lifespan,
     dependencies=[Depends(fastapi_context)],
 )

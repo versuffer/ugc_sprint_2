@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from fastapi.encoders import jsonable_encoder
 from starlette.responses import JSONResponse
 from starlette.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST
-from ugc_app.schemas.api.v1.schemas import (
+from schemas.api.v1.schemas import (
     BookmarkSchema,
     CreateBookmarkSchema,
     CreateScoreReviewSchema,
@@ -15,7 +15,7 @@ from ugc_app.schemas.api.v1.schemas import (
     ScoreSchema,
     TextReviewSchema,
 )
-from ugc_app.services.ugc.ugc_service import UgcService
+from services.ugc.ugc_service import UgcService
 
 ugc_router = APIRouter()
 
