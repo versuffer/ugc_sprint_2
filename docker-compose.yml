@@ -1,6 +1,19 @@
 version: '3.9'
 
 services:
+
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./infra/mongodb/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+      - mongo_data:/data/db
+    networks:
+      - ugc_network
+    restart: unless-stopped
+
   kafka-0:
     image: bitnami/kafka:3.4
     ports:
@@ -163,21 +176,39 @@ services:
       - clickhouse-server
       - filebeat
 
+  ugc_app:
+    container_name: ugc_app
+    build:
+      dockerfile: Dockerfile_UGC_API
+    expose:
+      - "8001"
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "10"
+        max-size: "10m"
+    networks:
+      - ugc_network
+    restart: always
+    depends_on:
+      - mongodb
+
   nginx:
     container_name: nginx
     image: nginx:latest
     ports:
-      - "8000:8000"
+      - "80:80"
     networks:
       - ugc_network
     volumes:
       - ./infra/nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./infra/nginx/fastapi_app.conf:/etc/nginx/conf.d/fastapi_app.conf
+      - ./infra/nginx/app.conf:/etc/nginx/conf.d/app.conf
       - nginx_static:/var/html/static/
       - nginx_media:/var/html/media/
     restart: always
     depends_on:
       - fastapi_app
+      - ugc_app
 
 volumes:
   kafka_0_data:
@@ -186,6 +217,7 @@ volumes:
   clickhouse_data:
   nginx_static:
   nginx_media:
+  mongo_data:
 
 networks:
   ugc_network:

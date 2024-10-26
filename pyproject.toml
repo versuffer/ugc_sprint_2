@@ -29,6 +29,11 @@ pyjwt = "2.8.0"
 backoff = "^2.2.1"
 sentry-sdk = {extras = ["fastapi"], version = "^2.13.0"}
 starlette-context = "^0.3.6"
+asyncpg = "^0.29.0"
+sqlmodel = "^0.0.22"
+psycopg2-binary = "^2.9.10"
+beanie = "^1.26.0"
+pymongo = "<4.9"
 
 
 [tool.poetry.group.test.dependencies]

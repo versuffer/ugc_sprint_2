@@ -1,0 +1,15 @@
+FROM python:3.11
+
+RUN pip install --upgrade pip  \
+    && pip install "poetry==1.8.2"  \
+    && poetry config virtualenvs.create false
+
+WORKDIR /application
+
+COPY ["poetry.lock", "pyproject.toml", "./"]
+
+RUN poetry install --no-root --no-interaction --without dev
+
+COPY app/ugc_app .
+
+CMD ["gunicorn", "-b", "0.0.0.0:8001", "-w", "1", "-k", "uvicorn.workers.UvicornWorker", "main:app"]
