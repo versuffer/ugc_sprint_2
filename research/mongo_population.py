@@ -1,7 +1,7 @@
 import asyncio
 import random
-from uuid import uuid4
 import time
+from uuid import uuid4
 
 from beanie import init_beanie
 from motor.motor_asyncio import AsyncIOMotorClient

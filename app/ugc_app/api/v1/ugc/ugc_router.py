@@ -2,8 +2,6 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from fastapi.encoders import jsonable_encoder
-from starlette.responses import JSONResponse
-from starlette.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST
 from schemas.api.v1.schemas import (
     BookmarkSchema,
     CreateBookmarkSchema,
@@ -16,6 +14,8 @@ from schemas.api.v1.schemas import (
     TextReviewSchema,
 )
 from services.ugc.ugc_service import UgcService
+from starlette.responses import JSONResponse
+from starlette.status import HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST
 
 ugc_router = APIRouter()
 

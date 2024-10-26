@@ -1,11 +1,10 @@
 from contextlib import asynccontextmanager
 
 import uvicorn
+from api.api_router import api_router
 from beanie import init_beanie
 from fastapi import Depends, FastAPI, Header
 from motor.motor_asyncio import AsyncIOMotorClient
-from starlette_context import request_cycle_context
-from api.api_router import api_router
 from services.repositories.mongo.models import (
     BookmarkModel,
     ScoreModel,
@@ -13,6 +12,7 @@ from services.repositories.mongo.models import (
     TextReviewModel,
 )
 from settings.config import settings
+from starlette_context import request_cycle_context
 
 
 async def fastapi_context(x_request_id=Header(default="NO_REQUEST_ID")):

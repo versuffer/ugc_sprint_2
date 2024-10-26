@@ -1,8 +1,8 @@
 import asyncio
 import random
+import time
 from datetime import UTC, datetime
 from uuid import UUID, uuid4
-import time
 
 import asyncpg
 import sqlalchemy as sa
